@@ -9,6 +9,7 @@ const SoruEkleDialog = () => {
     const [openCoktanSecmeliSoruEkle, setOpenCoktanSecmeliSoruEkle] = useState(false);
     const [openAcikUcluSoruEkle, setOpenAcikUcluSoruEkle] = useState(false);
     const [sorular, setSorular] = useState([]);
+    const [soru, setSoru] = useState([{soruMetni: "", siklar: [] }]);
     const [siklar, setSiklar] = useState([{id: 0, data: ""}]);
 
     const handleSikChange = (event, index) => {
@@ -28,11 +29,23 @@ const SoruEkleDialog = () => {
         }
         setSiklar([...siklar, tempData]);
     }
-
+    console.log(sorular)
     return (<>
         <Button className="soru-ekle" onClick={() => setOpenSoruTipiSec(true)}>
             Soru Ekle
         </Button>
+        <div>
+            {/*sorular listesini div içine yazdır*/}
+            {sorular.map((soru, index) => {
+                return <div key={index}>
+                    <p>{soru.soruMetni}</p>
+                    {soru.siklar.map((sik, index) => {
+                        return <p key={index}>{sik}</p>
+                    })}
+                </div>
+            }
+            )}
+        </div>
         <Dialog
             component="span"
             aria-labelledby='aria-labelledby'
@@ -97,8 +110,10 @@ const SoruEkleDialog = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={() => {
-                        setSorular(...sorular, document.getElementById('soru-context').value);
+                        setSoru(soru.concat({soruMetni: document.getElementById('soru-metin').value, siklar: siklar}));
                         setOpenCoktanSecmeliSoruEkle(false);
+                        setSorular(sorular.concat(soru));
+                        console.log(sorular);
                     }}>
                         Kaydet
                     </Button>
